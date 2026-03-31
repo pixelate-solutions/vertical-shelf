@@ -1,36 +1,121 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Tania's Pizza Wholesale Club
 
-## Getting Started
+Members-only wholesale ordering for Tania's Pizza. The app uses Clerk for authentication, Supabase for data, Stripe for memberships and invoicing, and Resend for operational emails.
 
-First, run the development server:
+## Stack
+
+- Next.js 16 App Router
+- Clerk auth
+- Supabase database
+- Stripe subscriptions + billing portal
+- Resend transactional email
+
+## Local setup
+
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+2. Copy `.env.example` to `.env.local` and fill in the real values.
+
+3. Run the app:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Required env vars
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
+NEXT_PUBLIC_SUPABASE_URL=
+SUPABASE_SERVICE_ROLE_KEY=
+STRIPE_SECRET_KEY=
+STRIPE_WEBHOOK_SECRET=
+STRIPE_PRICE_SLICE_CLUB=
+STRIPE_PRICE_WHOLESALE_MEMBER=
+STRIPE_PRICE_BUSINESS_PARTNER=
+RESEND_API_KEY=
+RESEND_FROM_EMAIL=
+NEXT_PUBLIC_APP_URL=
+OWNER_EMAIL=
+CRON_SECRET=
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## External setup still required
 
-## Learn More
+### Clerk
 
-To learn more about Next.js, take a look at the following resources:
+- Create a Clerk application.
+- Copy the publishable key and secret key into `.env.local`.
+- Use email/password or whatever auth methods you want enabled in the Clerk dashboard.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Supabase
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Create a Supabase project.
+- Run the migrations with `supabase db push`, or paste the SQL from `supabase/migrations/` into the SQL editor in order.
+- This app now uses Clerk for identity, so the schema no longer depends on Supabase Auth users.
 
-## Deploy on Vercel
+### Stripe
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Create three recurring prices for:
+  - Slice Club
+  - Wholesale Member
+  - Business Partner
+- Paste the price IDs into:
+  - `STRIPE_PRICE_SLICE_CLUB`
+  - `STRIPE_PRICE_WHOLESALE_MEMBER`
+  - `STRIPE_PRICE_BUSINESS_PARTNER`
+- After deploy, register a webhook endpoint at:
+  - `https://your-domain.vercel.app/api/webhooks/stripe`
+- Listen for:
+  - `customer.subscription.created`
+  - `customer.subscription.updated`
+  - `customer.subscription.deleted`
+  - `invoice.paid`
+  - `invoice.payment_failed`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Resend
+
+- Add your API key.
+- `RESEND_FROM_EMAIL` must use a verified sending domain.
+
+### Owner access
+
+- Set `OWNER_EMAIL` to the inbox that should receive reorder/custom request alerts.
+- After your first sign-up, promote that account in Supabase:
+
+```sql
+update profiles
+set is_owner = true
+where email = 'you@example.com';
+```
+
+### Cron
+
+- Generate a secret such as:
+
+```bash
+openssl rand -hex 32
+```
+
+- Put the same value in `CRON_SECRET` locally and in Vercel.
+
+## Brand assets
+
+Starter assets now live in `public/brand/`:
+
+- `pizza-badge.svg`
+- `dough-pattern.svg`
+
+Replace those with final official logo files, product photography, or store imagery if you want the site to use Tania's exact brand system instead of the starter assets included here.
+
+## Validation
+
+```bash
+npm run lint
+npm run build
+```
