@@ -24,7 +24,7 @@ create table profiles (
 -- MEMBERSHIPS
 create table memberships (
   id                      uuid primary key default gen_random_uuid(),
-  user_id                 text not null references profiles(id) on delete cascade,
+  user_id                 text not null unique references profiles(id) on delete cascade,
   tier                    membership_tier not null,
   status                  membership_status not null default 'pending',
   stripe_customer_id      text unique,
@@ -42,7 +42,6 @@ create table memberships (
   created_at              timestamptz not null default now(),
   updated_at              timestamptz not null default now()
 );
-create index idx_memberships_user_id on memberships(user_id);
 create index idx_memberships_stripe_customer on memberships(stripe_customer_id);
 create index idx_memberships_stripe_sub on memberships(stripe_subscription_id);
 
