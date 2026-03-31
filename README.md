@@ -32,7 +32,8 @@ npm run dev
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
 CLERK_SECRET_KEY=
 NEXT_PUBLIC_SUPABASE_URL=
-SUPABASE_SERVICE_ROLE_KEY=
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
+SUPABASE_SECRET_KEY=
 STRIPE_SECRET_KEY=
 STRIPE_WEBHOOK_SECRET=
 STRIPE_PRICE_SLICE_CLUB=
@@ -56,6 +57,9 @@ CRON_SECRET=
 ### Supabase
 
 - Create a Supabase project.
+- Use Supabase's current hosted-platform key pair:
+  - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
+  - `SUPABASE_SECRET_KEY`
 - Run the migrations with `supabase db push`, or paste the SQL from `supabase/migrations/` into the SQL editor in order.
 - This app now uses Clerk for identity, so the schema no longer depends on Supabase Auth users.
 
