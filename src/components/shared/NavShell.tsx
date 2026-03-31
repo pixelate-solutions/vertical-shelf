@@ -36,7 +36,7 @@ export function NavShell({ navItems, children, title }: Props) {
       <div className="mx-auto flex min-h-screen max-w-[1600px] gap-4 p-3 md:p-4">
         <aside
           className={cn(
-            'fixed inset-y-3 left-3 z-40 flex w-[min(18rem,calc(100vw-1.5rem))] flex-col rounded-[1.75rem] border border-[#eadcc7] bg-[#fffaf3]/95 p-3 shadow-[0_24px_60px_rgba(34,24,17,0.12)] backdrop-blur transition-transform md:static md:translate-x-0',
+            'fixed inset-y-3 left-3 z-40 flex w-[min(18rem,calc(100vw-1.5rem))] flex-col rounded-[1.75rem] border border-[#eadcc7] bg-[#fffaf3]/95 p-3 shadow-[0_24px_60px_rgba(34,24,17,0.12)] backdrop-blur transition-transform lg:static lg:translate-x-0',
             mobileOpen ? 'translate-x-0' : '-translate-x-[110%]'
           )}
         >
@@ -50,7 +50,7 @@ export function NavShell({ navItems, children, title }: Props) {
             <button
               type="button"
               onClick={() => setMobileOpen(false)}
-              className="rounded-full border border-[#eadcc7] p-2 text-[#6f5a49] md:hidden"
+              className="rounded-full border border-[#eadcc7] p-2 text-[#6f5a49] lg:hidden"
             >
               <X className="h-4 w-4" />
             </button>
@@ -99,7 +99,7 @@ export function NavShell({ navItems, children, title }: Props) {
             type="button"
             aria-label="Close navigation"
             onClick={() => setMobileOpen(false)}
-            className="fixed inset-0 z-30 bg-[#221811]/35 md:hidden"
+            className="fixed inset-0 z-30 bg-[#221811]/35 lg:hidden"
           />
         )}
 
@@ -113,7 +113,7 @@ export function NavShell({ navItems, children, title }: Props) {
               <button
                 type="button"
                 onClick={() => setMobileOpen(true)}
-                className="rounded-full border border-[#eadcc7] bg-white p-2 text-[#6f5a49] md:hidden"
+                className="rounded-full border border-[#eadcc7] bg-white p-2 text-[#6f5a49] lg:hidden"
               >
                 <Menu className="h-5 w-5" />
               </button>

@@ -30,7 +30,7 @@ export function ProductCard({ item, memberTier, customDiscountPct, onAddToOrder 
           className="h-44 w-full object-cover"
         />
       )}
-      <CardContent className="flex flex-1 flex-col gap-4 pt-5">
+      <CardContent className="flex flex-1 flex-col gap-4 md:pt-5 pb-5">
         <div className="flex-1">
           <h3 className="font-semibold text-[#221811]">{item.name}</h3>
           {item.description && (
