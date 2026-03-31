@@ -12,20 +12,45 @@ export default function OnboardingPage() {
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
 
+  async function getResponsePayload(response: Response) {
+    const text = await response.text()
+
+    if (!text) {
+      return null
+    }
+
+    try {
+      return JSON.parse(text) as { error?: string; url?: string }
+    } catch {
+      return { error: text }
+    }
+  }
+
   async function selectTier(tier: MembershipTier) {
     setLoading(tier)
     setError(null)
+
     try {
       const res = await fetch('/api/stripe/create-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ tier }),
       })
-      const json = await res.json()
-      if (!res.ok) throw new Error(json.error ?? 'Failed to create checkout session')
-      router.push(json.url)
+
+      const payload = await getResponsePayload(res)
+
+      if (!res.ok) {
+        throw new Error(payload?.error ?? 'Failed to create checkout session')
+      }
+
+      if (!payload?.url) {
+        throw new Error('Stripe checkout URL was not returned')
+      }
+
+      router.push(payload.url)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong')
+    } finally {
       setLoading(null)
     }
   }

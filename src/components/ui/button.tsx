@@ -22,7 +22,7 @@ export function Button({
     <button
       disabled={disabled || loading}
       className={cn(
-        'inline-flex items-center justify-center rounded-2xl font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#bf3425]/40 disabled:pointer-events-none disabled:opacity-50',
+        'inline-flex cursor-pointer items-center justify-center rounded-2xl font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#bf3425]/40 disabled:cursor-not-allowed disabled:pointer-events-none disabled:opacity-50',
         {
           'bg-[#bf3425] text-white hover:bg-[#a02c20]': variant === 'primary',
           'bg-[#221811] text-white hover:bg-[#3b2b21]': variant === 'secondary',
